@@ -54,6 +54,9 @@ int board_init(void)
 	ADI_init();
 	/*FPGA forbiden*/
 	misc_init();
+#ifdef CONFIG_SY108_NATIVE_BOOT
+    { extern void sy108_boot_late(void); sy108_boot_late(); }
+#endif
 	pmic_adc_Init();
 	/*FPGA forbiden*/
 	pin_init();

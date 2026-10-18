@@ -10,7 +10,8 @@
 
 #define SPRD_DEBUG_LEVEL		2
 
-#define CONFIG_SY108_OEM_BOOT
+#define CONFIG_SY108_OEM_BOOT /* OEM image-header conventions only. */
+#define CONFIG_SY108_NATIVE_BOOT
 #define CONFIG_PMIC_CHIP_ID
 #define CONFIG_BAND_DETECT
 #define CONFIG_KERNEL_BOOT_CP
@@ -185,6 +186,7 @@
 /* Initial environment variables */
 #define CONFIG_BOOTCOMMAND			"cboot normal"
 #define CONFIG_BOOTDELAY		0
+#define CONFIG_ZERO_BOOTDELAY_CHECK /* Pending UART input can enter the console. */
 #define	CONFIG_EXTRA_ENV_SETTINGS				"mtdparts=" MTDPARTS_DEFAULT "\0"
 
 

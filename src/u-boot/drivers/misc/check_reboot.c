@@ -11,6 +11,9 @@
 #endif
 #define KEY_PRESSED		0
 #define KEY_NOT_PRESSED		1
+#ifdef CONFIG_SY108_NATIVE_BOOT
+DECLARE_GLOBAL_DATA_PTR;
+#endif
 
 unsigned reboot_reg = 0;
 unsigned sysdump_flag = 0;
@@ -47,11 +50,18 @@ unsigned check_reboot_mode(void)
 	int32_t vbat_vol;
 #endif	
 	unsigned rst_mode= 0;
-	unsigned hw_rst_mode = ANA_REG_GET(ANA_REG_GLB_POR_SRC_FLAG);
+	unsigned hw_rst_mode, rtc_reset, pending;
+#ifdef CONFIG_SY108_NATIVE_BOOT
+    hw_rst_mode = gd->arch.sy108_valid ? gd->arch.sy108_por_source : ANA_REG_GET(ANA_REG_GLB_POR_SRC_FLAG);
+    rtc_reset = gd->arch.sy108_valid ? gd->arch.sy108_rtc_reset : rtc_domain_reg_read();
+#else
+    hw_rst_mode = ANA_REG_GET(ANA_REG_GLB_POR_SRC_FLAG);
+    rtc_reset = rtc_domain_reg_read();
+#endif
 	debugf("hw_rst_mode==%x\n", hw_rst_mode);
 
 /*for download mode reboot system */
-	if(HWRST_RTCSTATUS_DOWNLOAD_BOOT == rtc_domain_reg_read()) {
+	if(HWRST_RTCSTATUS_DOWNLOAD_BOOT == rtc_reset) {
 		debugf("rtc_domain_reg get reboot normal mode \n");
 		rtc_domain_reg_write(HWRST_RTCSTATUS_DEFAULT);
 		ANA_REG_SET(ANA_REG_GLB_POR_RST_MONITOR, 0); //clear flag
@@ -59,7 +69,11 @@ unsigned check_reboot_mode(void)
 	}
 /*for download mode reboot system ---- end*/
 
+#ifdef CONFIG_SY108_NATIVE_BOOT
+    reboot_reg = rst_mode = gd->arch.sy108_valid ? gd->arch.sy108_por_monitor : ANA_REG_GET(ANA_REG_GLB_POR_RST_MONITOR);
+#else
 	reboot_reg = rst_mode = ANA_REG_GET(ANA_REG_GLB_POR_RST_MONITOR);
+#endif
 	sysdump_flag = rst_mode & HWRST_STATUS_SYSDUMPEN;
 	printf("check_reboot_mode:get raw rst_mode is %x and sysdump_flag is %x\n",rst_mode,sysdump_flag);
 	rst_mode &= 0xFF;
@@ -69,7 +83,11 @@ unsigned check_reboot_mode(void)
 	ANA_REG_SET(ANA_REG_GLB_WDG_RST_MONITOR, 0);
 
 	debugf("rst_mode==%x\n",rst_mode);
-	if(hw_watchdog_rst_pending()){
+    pending=hw_watchdog_rst_pending(); /* consume live status after ADI init */
+#ifdef CONFIG_SY108_NATIVE_BOOT
+    if (gd->arch.sy108_valid) pending=gd->arch.sy108_pending;
+#endif
+	if(pending){
 		debugf("hw watchdog rst int pending\n");
 		if(rst_mode == HWRST_STATUS_RECOVERY)
 			return CMD_RECOVERY_MODE;

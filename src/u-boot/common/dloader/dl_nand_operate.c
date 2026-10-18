@@ -799,7 +799,9 @@ OPERATE_STATUS dl_download_end(void)
   else if(dl_stat.part_type==PART_TYPE_UBI)name=dl_stat.ubi.cur_volnm;
   else return 0;
   printf("orca fdl2 verify img:%s\n",name);
+#ifndef CONFIG_SY108_NATIVE_BOOT
   sy108_classify_download(name,dl_stat.buf);
+#endif
   switch(dl_stat.part_type) {
   case PART_TYPE_MTD:
    ret=_dl_mtd_part_erase(dl_stat.nand,name);

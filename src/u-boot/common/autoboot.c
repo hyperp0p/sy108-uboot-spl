@@ -376,4 +376,8 @@ void autoboot_command(const char *s)
 			run_command_list(s, -1, 0);
 	}
 #endif /* CONFIG_MENUKEY */
+#ifdef CONFIG_SY108_NATIVE_BOOT
+    /* Returning from autoboot leaves the operator at the UART command line. */
+    { extern void sy108_boot_maintenance(void); sy108_boot_maintenance(); }
+#endif
 }

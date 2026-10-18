@@ -279,7 +279,13 @@ static int mark_bootstage(void)
 	return 0;
 }
 
+#ifdef CONFIG_SY108_NATIVE_BOOT
+extern int sy108_boot_early(void);
+#endif
 init_fnc_t *init_sequence[] = {
+#ifdef CONFIG_SY108_NATIVE_BOOT
+ sy108_boot_early, /* snapshot before reset-reason reads or storage access */
+#endif
 	arch_cpu_init,		/* basic arch cpu dependent setup */
 	mark_bootstage,
 #ifdef CONFIG_OF_CONTROL

@@ -114,7 +114,12 @@ unsigned reboot_mode_check(void)
 	   static unsigned check_times = 0;
 	   if(!check_times)
 	  {
-		  rst_mode = check_reboot_mode();
+		  #ifdef CONFIG_SY108_NATIVE_BOOT
+          DECLARE_GLOBAL_DATA_PTR;
+          rst_mode = gd->arch.sy108_valid ? gd->arch.sy108_mode : check_reboot_mode();
+#else
+          rst_mode = check_reboot_mode();
+#endif
 		  check_times++;
 	  }
 	  debugf("reboot_mode_check rst_mode=0x%x\n",rst_mode);
@@ -373,6 +378,28 @@ int do_cboot(cmd_tbl_t *cmdtp, int flag, int argc, char *const argv[])
 		}
 	}
 
+#ifdef CONFIG_SY108_NATIVE_BOOT
+ { extern void sy108_native_boot(unsigned);
+   DECLARE_GLOBAL_DATA_PTR;
+   /* The OEM default command is "cboot normal". Retain explicit PMIC
+    * maintenance requests even when that default supplies an argument. */
+   if (bootmode == CMD_NORMAL_MODE && gd->arch.sy108_valid) {
+       switch (gd->arch.sy108_mode) {
+       case CMD_FASTBOOT_MODE: case CMD_AUTODLOADER_REBOOT:
+       case CMD_CALIBRATION_MODE: case CMD_FACTORYTEST_MODE:
+       case CMD_SPECIAL_MODE: case CMD_IQ_REBOOT_MODE:
+       case CMD_SPRDISK_MODE: case CMD_SLEEP_MODE: case CMD_ALARM_MODE:
+           bootmode=gd->arch.sy108_mode;
+       }
+   }
+   if (bootmode == CMD_NORMAL_MODE || bootmode == CMD_RECOVERY_MODE ||
+       bootmode == CMD_WATCHDOG_REBOOT || bootmode == CMD_AP_WATCHDOG_REBOOT ||
+       bootmode == CMD_UNKNOW_REBOOT_MODE || bootmode == CMD_PANIC_REBOOT ||
+       bootmode == CMD_EXT_RSTN_REBOOT_MODE || bootmode == CMD_UNDEFINED_MODE)
+       sy108_native_boot(bootmode);
+   else { extern void sy108_boot_maintenance(void); sy108_boot_maintenance(); }
+ }
+#endif
 	board_boot_mode_regist(boot_mode_array);
 
 	printf("enter boot mode %d\n", bootmode);

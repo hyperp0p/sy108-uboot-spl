@@ -598,11 +598,16 @@ int _boot_load_required_image(boot_image_required_t img_info)
 				    exe_offset,
 				    img_info.mem_addr)) {
 			errorf("read %s partition fail\n", img_info.partition);
+#ifdef CONFIG_SY108_NATIVE_BOOT
+            return 0;
+#endif
 		}
 
 #endif
   if (!memcmp("nr_agdsp",img_info.partition,strlen("nr_agdsp"))) {
+#ifndef CONFIG_SY108_NATIVE_BOOT
    sy108_verify_partition(img_info.partition,(void *)img_info.mem_addr);
+#endif
    memcpy((void *)img_info.mem_addr,(void *)(img_info.mem_addr+512),img_info.size-512);
   }
  }
@@ -1619,7 +1624,11 @@ void vlx_nand_boot(char *kernel_pname, int backlight_set, int lcd_enable)
 
 	 partition = !memcmp(kernel_pname,RECOVERY_PART,strlen(RECOVERY_PART))?"recovery":"boot";
 	 printf("verify orca cpe boot.img\n");
+#ifndef CONFIG_SY108_NATIVE_BOOT
 { register char *arg asm("x0")=(char *)partition; register const boot_image_required_t *img asm("x19")=s_boot_image_table; asm("" :  : "r"(arg), "r"(img)); sy108_verify_partition(arg,NULL); image=img; }
+#else
+ image=s_boot_image_table;
+#endif
 
 		/*load required image which config in table */
 		i = 0;

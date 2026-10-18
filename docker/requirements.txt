@@ -1,0 +1,9 @@
+# Offline verification dependencies; installed only inside the amd64 Docker image.
+cryptography==44.0.3 --hash=sha256:192ed30fac1728f7587c6f4613c29c584abdc565d7417c13904708db10206645 --hash=sha256:58968d331425a6f9eedcee087f77fd3c927c88f55368f43ff7e0a19891f2642c
+cffi==1.17.1 --hash=sha256:0e2b1fac190ae3ebfe37b979cc1ce69c81f4e4fe5746bb401dca63a9062cdaf1
+pycparser==2.22 --hash=sha256:c3702b6d3dd8c7abc1afa565d7e63d53a1d0bd86cdc24edd75470f4de499cfcc
+unicorn==2.1.4 --hash=sha256:9d6e6dea140560de4ebd8446661f7ef84a357d428c14a3ef09dacd306ec8c239
+capstone==5.0.6 --hash=sha256:0358855773100bb91ae6681fabce7299df83156945ba943f6211061a592c54a6
+pyelftools==0.32 --hash=sha256:013df952a006db5e138b1edf6d8a68ecc50630adbd0d83a2d41e7f846163d738
+importlib-resources==6.4.5 --hash=sha256:ac29d5f956f01d5e4bb63102a5a19957f1b9175e45649977264a1416783bb717
+zipp==3.20.2 --hash=sha256:a817ac80d6cf4b23bf7f2828b7cabf326f15a001bea8b1f9b49631780ba28350

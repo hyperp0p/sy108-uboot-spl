@@ -42,6 +42,9 @@ int do_role(cmd_tbl_t *cmdtp, int flag, int argc, char *const argv[])
 #endif
 	switch(boot_role) {
 		case BOOTLOADER_MODE_DOWNLOAD:
+#ifdef CONFIG_SY108_NATIVE_BOOT
+            { extern void sy108_boot_maintenance(void); sy108_boot_maintenance(); }
+#endif
 			setenv("bootdelay", "0");
 			setenv("bootcmd", "download");
 			debugf("Get chipram env mode %x,go download\n", boot_role);

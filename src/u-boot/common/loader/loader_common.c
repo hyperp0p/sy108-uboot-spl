@@ -203,10 +203,12 @@ void fdt_fixup_all(u8 *fdt_blob)
 #endif
 
 	fdt_fixup_first_mode(fdt_blob);
-	extern int sy108_fdt_fixup_hash(void *);
 	extern int sy108_fdt_fixup_system_mtd_ubi(void *);
 	sy108_fdt_fixup_system_mtd_ubi(fdt_blob);
+#ifndef CONFIG_SY108_NATIVE_BOOT
+	extern int sy108_fdt_fixup_hash(void *);
 	sy108_fdt_fixup_hash(fdt_blob);
+#endif
 
 #ifdef CONFIG_TEECFG_CUSTOM
 	if(reboot_mode_check() != CMD_TOS_PANIC_MODE)

@@ -1,0 +1,8 @@
+*
+!docker/
+!docker/**
+!src/
+!src/**
+**/__pycache__/
+**/*.pyc
+**/.DS_Store

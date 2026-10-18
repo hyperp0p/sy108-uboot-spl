@@ -32,14 +32,13 @@ def export(part, source, output):
 
 def manifest(output):
     rows = []
-    for part in ['spl', 'uboot']:
-        for path in sorted((output / part).glob('*')):
-            if path.is_file():
-                rows.append({
-                    'file': str(path.relative_to(output)),
-                    'size': path.stat().st_size,
-                    'sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
-                })
+    for path in sorted(output.rglob('*')):
+        if path.is_file() and path.name != 'manifest.json':
+            rows.append({
+                'file': str(path.relative_to(output)),
+                'size': path.stat().st_size,
+                'sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
+            })
     (output / 'manifest.json').write_text(json.dumps({'artifacts': rows}, indent=2) + '\n')
     print('Wrote manifest.json for %d artifacts' % len(rows))
 

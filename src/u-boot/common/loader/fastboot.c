@@ -632,7 +632,9 @@ void fb_cmd_flash(const char *arg, void *data, u32 sz)
 {
  int ret=-1,i;
  extern int sy108_classify_download(const char *,void *);
+#ifndef CONFIG_SY108_NATIVE_BOOT
  sy108_classify_download(arg,data);
+#endif
 
 	/**
 	 *	FIX ME!

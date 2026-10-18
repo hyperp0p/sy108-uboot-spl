@@ -1,4 +1,6 @@
 obj-y += loader_common.o
+obj-$(CONFIG_SY108_NATIVE_BOOT) += sy108/
+
 #obj-y += loader_emmc.o
 obj-y += loader_nvm.o
 obj-y += sy108_image_table.o

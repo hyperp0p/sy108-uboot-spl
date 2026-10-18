@@ -477,8 +477,8 @@ next:;
 }
 
 
+#ifndef CONFIG_SY108_NATIVE_BOOT
 extern char uboot_hash[137];
-static unsigned char nr_iq_status;
 int sy108_fdt_fixup_hash(void *fdt)
 {
  int len=strlen(uboot_hash);
@@ -486,6 +486,8 @@ int sy108_fdt_fixup_hash(void *fdt)
  uboot_hash[len]=0;
  return fdt_chosen_bootargs_append(fdt,uboot_hash,1);
 }
+#endif
+static unsigned char nr_iq_status;
 
 int fdt_chosen_bootargs_replace(void *fdt, char *old_args, char *new_args)
 {

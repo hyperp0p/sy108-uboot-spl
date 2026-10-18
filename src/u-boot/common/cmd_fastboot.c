@@ -15,6 +15,9 @@ static int do_fastboot(cmd_tbl_t *cmdtp, int flag, int argc, char *const argv[])
 {
 	int ret;
 
+#ifdef CONFIG_SY108_NATIVE_BOOT
+    { extern void sy108_boot_maintenance(void); sy108_boot_maintenance(); }
+#endif
 	g_dnl_clear_detach();
 	ret = g_dnl_register("usb_dnl_fastboot");
 	if (ret)

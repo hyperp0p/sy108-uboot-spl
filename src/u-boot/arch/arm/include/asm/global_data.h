@@ -14,6 +14,14 @@
 
 /* Architecture-specific global data */
 struct arch_global_data {
+#ifdef CONFIG_SY108_NATIVE_BOOT
+	u32 sy108_mode;
+	u16 sy108_stage;
+	u8 sy108_pending, sy108_valid;
+	int sy108_error;
+	u64 sy108_frequency;
+	u16 sy108_por_source, sy108_por_monitor, sy108_rtc_reset;
+#endif
 #if defined(CONFIG_FSL_ESDHC)
 	u32 sdhc_clk;
 #endif

@@ -15,9 +15,12 @@ COPY docker/scripts/fetch-dependencies.py docker/scripts/build-toolchain.sh /opt
 RUN python3 /opt/boot/fetch-dependencies.py /opt/boot/dependencies.lock.json
 RUN /bin/sh /opt/boot/build-toolchain.sh
 FROM base AS builder
+RUN apt-get update && apt-get install -y --no-install-recommends python3-pip qemu-user=1:4.2-3ubuntu6.30 && rm -rf /var/lib/apt/lists/*
+COPY docker/requirements.txt /opt/boot/requirements.txt
+RUN python3 -m pip install --no-cache-dir --only-binary=:all: --require-hashes -r /opt/boot/requirements.txt
 COPY --from=toolchain /opt/ /opt/
 ENV PATH=/opt/binutils230/bin:/opt/linaro7/gcc-linaro-7.2.1-2017.11-x86_64_aarch64-linux-gnu/bin:/opt/dtc140/bin:${PATH}
-ENV SOURCE_DATE_EPOCH=1661071572 GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_SYSTEM=/dev/null HOME=/tmp
+ENV SOURCE_DATE_EPOCH=1661071572 GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_SYSTEM=/dev/null HOME=/tmp PYTHONDONTWRITEBYTECODE=1
 COPY src/u-boot/ /src/u-boot/
 COPY src/chipram/ /src/chipram/
 COPY docker/scripts/ /opt/boot/

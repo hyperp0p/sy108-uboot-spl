@@ -687,7 +687,9 @@ libs-y += drivers/usb/ulpi/
 libs-y += common/
 
 libs-$(CONFIG_SECBOOT) += lib/secureboot/
+ifndef CONFIG_SY108_NATIVE_BOOT
 libs-y += lib/secureboot/sy108/
+endif
 ifdef CONFIG_X86
 libs-y += lib/sec_vm/
 else

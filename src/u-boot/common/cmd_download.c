@@ -150,6 +150,9 @@ int do_download(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	DA_INFO_T Da_Info = {0};
 	int offset = 0;
 
+#ifdef CONFIG_SY108_NATIVE_BOOT
+    { extern void sy108_boot_maintenance(void); sy108_boot_maintenance(); }
+#endif
 #ifdef CONFIG_USB_ENUM_IN_UBOOT
 	chip_version = sprd_get_chip_version();
 	if ((dl_times==0) && (boot_role == BOOTLOADER_MODE_DOWNLOAD) && (chip_version < USB_FIX_VERSION))
