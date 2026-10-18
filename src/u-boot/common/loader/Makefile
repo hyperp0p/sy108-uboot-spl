@@ -1,0 +1,26 @@
+obj-y += loader_common.o
+#obj-y += loader_emmc.o
+obj-y += loader_nvm.o
+obj-y += sy108_image_table.o
+obj-y += boot_mode.o
+obj-y += dev_tree.o
+obj-y += sprd_fdt_support.o
+obj-y += calibration_detect.o
+obj-y += fastboot.o
+obj-y += recv_mode_yocto.o
+obj-y += alarm_mode.o
+obj-y += autodloader_mode.o
+#obj-y += secure_verify.o
+obj-y += vbat_check.o
+obj-$(CONFIG_SPRD_SYSDUMP) += sysdump.o
+obj-$(CONFIG_X86) += crashlog.o
+obj-y += sd_operate.o
+obj-y += sprd_cpcmdline.o
+obj-y += sprdisk.o
+obj-y += sprd_fdt_memory.o
+obj-$(CONFIG_MEM_LAYOUT_DECOUPLING) += process_cp_coupling_info.o
+obj-y += read_miscdata_boot_flag.o
+obj-y += hwfeature.o
+
+obj-y += sy108_pctool_literals.o
+CFLAGS_sy108_pctool_literals.o += -fno-toplevel-reorder

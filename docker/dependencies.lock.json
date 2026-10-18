@@ -1,0 +1,23 @@
+{
+  "gcc": {
+    "kind": "prebuilt",
+    "version": "Linaro GCC 7.2.1 20171011 (7.2-2017.11)",
+    "url": "https://sources.buildroot.net/toolchain-external-linaro-aarch64/gcc-linaro-7.2.1-2017.11-x86_64_aarch64-linux-gnu.tar.xz",
+    "sha256": "20181f828e1075f1a493947ff91e82dd578ce9f8638fbdfc39e24b62857d8f8d",
+    "destination": "/opt/linaro7/gcc-linaro-7.2.1-2017.11-x86_64_aarch64-linux-gnu"
+  },
+  "binutils": {
+    "kind": "source",
+    "version": "2.30.0.20180208",
+    "url": "https://codeload.github.com/RTEMS/sourceware-mirror-binutils-gdb/tar.gz/caa839fba66600a6c36d3639906ed9110b79c307",
+    "sha256": "c1488c5e8ca0cd4eb9ccf86a4542e81ef9cef42c90ebdb6da863ec5cfd4a37c9",
+    "destination": "/tmp/dependencies/binutils"
+  },
+  "dtc": {
+    "kind": "source",
+    "version": "1.4.0",
+    "url": "https://mirrors.edge.kernel.org/pub/software/utils/dtc/dtc-1.4.0.tar.xz",
+    "sha256": "815a2f21b4376e8547fdfb1f2dcd290074a30c48ccf57fff0e256e73a52315a4",
+    "destination": "/tmp/dependencies/dtc"
+  }
+}

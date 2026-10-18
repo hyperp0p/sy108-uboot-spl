@@ -1,0 +1,2 @@
+# Preserve the verified source bytes, including original vendor line endings.
+* -text

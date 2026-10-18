@@ -1,0 +1,6 @@
+/.git
+/build
+/docs
+**/.DS_Store
+**/__pycache__
+**/*.pyc
