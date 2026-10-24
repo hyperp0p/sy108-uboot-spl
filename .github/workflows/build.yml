@@ -1,0 +1,48 @@
+name: Build SY108 U-Boot Bootloader
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/**'
+
+jobs:
+  build-uboot:
+    name: Build U-Boot (x86_64)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: System Info
+        run: |
+          uname -m
+          lscpu
+          free -h
+
+      - name: Build U-Boot via Docker
+        run: |
+          make uboot LABEL=mainline
+
+      - name: Package Artifacts
+        run: |
+          mkdir -p /tmp/uboot-artifacts
+          cp -v build/mainline/uboot/u-boot-dtb.bin /tmp/uboot-artifacts/u-boot-dtb.bin
+          cp -v build/mainline/uboot/u-boot-dtb-aligned16.bin /tmp/uboot-artifacts/u-boot-dtb-aligned16.bin || true
+          cp -v docker/scripts/envelope.py /tmp/uboot-artifacts/envelope.py
+          cd /tmp/uboot-artifacts
+          sha256sum * > SHA256SUMS
+          cat SHA256SUMS
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sy108-uboot-bin
+          path: /tmp/uboot-artifacts/
+          retention-days: 14
